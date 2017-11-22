@@ -9,14 +9,15 @@
  */
 package de.mpicbg.ulman;
 
-import org.scijava.ItemVisibility;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.log.LogService;
-
 import org.scijava.widget.FileWidget;
+import org.scijava.ItemVisibility;
+
 import java.io.File;
+import java.io.IOException;
 
 import de.mpicbg.ulman.inputParsers.*;
 import de.mpicbg.ulman.outputPresenters.*;
@@ -35,7 +36,7 @@ public class loggerFrontend implements Command
 	//information....
 	@Parameter(visibility = ItemVisibility.MESSAGE, persist = false, required = false, label = ":")
 	private final String infoMsg
-		= "Cell tracking accuracy measurement based on comparison of acyclic";
+		= "some information?";
 
 	@Parameter(label = "Path to input log file:",
 		columns = 40, style = FileWidget.OPEN_STYLE,
@@ -43,13 +44,14 @@ public class loggerFrontend implements Command
 	public File inLogFile;
 
 	@Parameter(label = "Input log parser:",
-		choices = {"Simple parser",
+		choices = {"Testing parser",
+		           "DAIS parser",
 		           "MitoGen parser"})
 	public String inputParser;
 
 	@Parameter(label = "Output log presenter:",
-		choices = {"One writer per one file",
-		           "One SVG image"})
+		choices = {"Simple console writer",
+		           "SVG image"})
 	public String outputPresenter;
 
 
@@ -62,14 +64,35 @@ public class loggerFrontend implements Command
 			System.out.println("parser      : "+inputParser);
 			System.out.println("presenter   : "+outputPresenter);
 
-			//should init the appropriate parsers and presenters
-			//create the loggerBackend
-			//and call it with the parser and presenter
+			//initialize the appropriate parser and presenter
+			Parser pa = null;
+			Presenter pr = null;
+			try {
+				if (inputParser.startsWith("DAIS"))
+					pa = new DAISwp13(inLogFile);
+				else
+				if (inputParser.startsWith("MitoGen"))
+					pa = null; //new MitoGen(inLogFile);
+				else
+					//default (debugging) parser
+					pa = new AbstractParser();
 
-			Parser pa    = new AbstractParser();
-			Presenter pr = new AbstractPresenter();
+				if (outputPresenter.startsWith("SVG"))
+					pr = null; //new DAISwp13(inLogFile);
+				else
+				if (outputPresenter.startsWith("HTML"))
+					pr = null; //new MitoGen(inLogFile);
+				else
+					//default (debugging) presenter
+					pr = new AbstractPresenter();
+			}
+			catch (IOException x) {
+				 System.err.format("IOException: %s%n", x);
+			}
+
+			//create the loggerBackend, and use it
 			loggerBackend lb = new loggerBackend(pa,pr);
-			lb.msgWrap = 40;
+			//lb.msgWrap = 40;
 			lb.process();
 		}
 		catch (RuntimeException e) {
@@ -105,8 +128,8 @@ public class loggerFrontend implements Command
 
 		//parse and store the arguments, if necessary
 		miniMe.inLogFile = new File("no file chosen");
-		miniMe.inputParser = "Simple parser";
-		miniMe.outputPresenter = "One writer per one file";
+		miniMe.inputParser = "DAIS parser";
+		miniMe.outputPresenter = "Simple presenter";
 
 		miniMe.run();
 	}
