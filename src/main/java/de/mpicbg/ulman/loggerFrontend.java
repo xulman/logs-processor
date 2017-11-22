@@ -51,6 +51,7 @@ public class loggerFrontend implements Command
 
 	@Parameter(label = "Output log presenter:",
 		choices = {"Simple console writer",
+		           "HTML file",
 		           "SVG image"})
 	public String outputPresenter;
 
@@ -77,17 +78,17 @@ public class loggerFrontend implements Command
 					//default (debugging) parser
 					pa = new AbstractParser();
 
-				if (outputPresenter.startsWith("SVG"))
-					pr = null; //new DAISwp13(inLogFile);
-				else
 				if (outputPresenter.startsWith("HTML"))
-					pr = null; //new MitoGen(inLogFile);
+					pr = new HTML(new File("/tmp/dais_log.html"));
+				else
+				if (outputPresenter.startsWith("SVG"))
+					pr = null; //new DAISwp13("file");
 				else
 					//default (debugging) presenter
 					pr = new AbstractPresenter();
 			}
-			catch (IOException x) {
-				 System.err.format("IOException: %s%n", x);
+			catch (IOException e) {
+				 System.err.format("IOException: %s%n", e);
 			}
 
 			//create the loggerBackend, and use it
@@ -127,9 +128,9 @@ public class loggerFrontend implements Command
 		final loggerFrontend miniMe = new loggerFrontend();
 
 		//parse and store the arguments, if necessary
-		miniMe.inLogFile = new File("no file chosen");
+		miniMe.inLogFile = new File("/tmp/dais_log.txt");
 		miniMe.inputParser = "DAIS parser";
-		miniMe.outputPresenter = "Simple presenter";
+		miniMe.outputPresenter = "HTML presenter";
 
 		miniMe.run();
 	}

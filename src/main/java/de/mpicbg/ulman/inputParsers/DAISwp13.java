@@ -39,7 +39,7 @@ public class DAISwp13 extends AbstractParser
 		try {
 			reader.close();
 		}
-		catch (IOException x)
+		catch (IOException e)
 		{ } //just don't complain
 	}
 
@@ -67,8 +67,8 @@ public class DAISwp13 extends AbstractParser
 			currentEvent.y = ++counter;
 			currentEvent.msg = line;
 		}
-		catch (IOException x) {
-			 System.err.format("IOException: %s%n", x);
+		catch (IOException e) {
+			 System.err.format("IOException: %s%n", e);
 			 throw new RuntimeException();
 		}
 	}
