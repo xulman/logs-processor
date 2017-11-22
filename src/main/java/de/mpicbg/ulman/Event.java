@@ -22,10 +22,8 @@ public class Event
 
 	Event(final String _x, final Long _y, final String _msg)
 	{
-		//TODO: should test here for sensibility of the input data!
-
-		x = _x;
-		y = _y;
-		msg = _msg;
+		x = (_x != null)? _x : "empty";
+		y = (_y != null)? _y : 0;
+		msg = (_msg != null)? _msg : "noMsg";
 	}
 }
