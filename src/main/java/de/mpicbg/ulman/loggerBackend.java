@@ -107,7 +107,7 @@ class loggerBackend
 		presenter.initialize(logs.size(), yMin,yMax, msgMaxLines);
 
 		//iterate logged data in the correct order
-		for (String x : permutation.values()) //TODO is the order okay? use iterators otherwise
+		for (String x : permutation.values())
 		{
 			TreeMap<Long,String> xLog = logs.get(x);
 			//NB: Tree guarantees the 'y' values are accessed in the correct order

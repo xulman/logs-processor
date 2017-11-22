@@ -18,6 +18,9 @@ import org.scijava.log.LogService;
 import org.scijava.widget.FileWidget;
 import java.io.File;
 
+import de.mpicbg.ulman.inputParsers.*;
+import de.mpicbg.ulman.outputPresenters.*;
+
 
 @Plugin(type = Command.class, menuPath = "Ulman>logger",
         name = "Ulman_logger", headless = true,
@@ -62,6 +65,12 @@ public class loggerFrontend implements Command
 			//should init the appropriate parsers and presenters
 			//create the loggerBackend
 			//and call it with the parser and presenter
+
+			Parser pa    = new AbstractParser();
+			Presenter pr = new AbstractPresenter();
+			loggerBackend lb = new loggerBackend(pa,pr);
+			lb.msgWrap = 40;
+			lb.process();
 		}
 		catch (RuntimeException e) {
 			if (log != null) log.error("problem: "+e.getMessage());

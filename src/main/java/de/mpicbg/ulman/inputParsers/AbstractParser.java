@@ -53,9 +53,9 @@ public class AbstractParser implements Parser
 	private
 	void readNextXYMsg()
 	{
-		//basically a test event...
-		currentEvent.x = counter < 10? "source 2" : "source 1";
-		currentEvent.y = ++counter;
+		//basically a test event from 4 sources
+		currentEvent.x = "source "+(counter % 4);
+		currentEvent.y = 100 - (++counter);
 		currentEvent.msg = "msg no #"+counter;
 
 		if (counter == 20) isThereNext = false;
