@@ -16,11 +16,11 @@ package de.mpicbg.ulman;
  */
 public class Event
 {
-	public final String x;
-	public final Long   y;
-	public final String msg;
+	public String x;
+	public Long   y;
+	public String msg;
 
-	Event(final String _x, final Long _y, final String _msg)
+	public Event(final String _x, final Long _y, final String _msg)
 	{
 		x = (_x != null)? _x : "empty";
 		y = (_y != null)? _y : 0;

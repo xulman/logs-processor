@@ -35,7 +35,7 @@ public class loggerFrontend implements Command
 		= "Cell tracking accuracy measurement based on comparison of acyclic";
 
 	@Parameter(label = "Path to input log file:",
-		columns = 40, style = FileWidget.DIRECTORY_STYLE, //TODO
+		columns = 40, style = FileWidget.OPEN_STYLE,
 		description = "The log file content should be understandable by the choosen log parser.")
 	public File inLogFile;
 

@@ -14,9 +14,11 @@ package de.mpicbg.ulman.outputPresenters;
  *
  * the triples are fed in the guaranteed order: all from one 'x' is shipped
  * before any other 'x' is provided (since 'x' are considered labels, not
- * values/coordinates on the x-axis, no ordering is assumed here); within
- * the same 'x' the order of incoming triples is dictated by a natural ordering
- * of the 'y' values (from the smallest to the largest).
+ * values/coordinates on the x-axis, no ordering is assumed here -- instead,
+ * the order established from user of this class is used); within the same 'x'
+ * the order of incoming triples is dictated by a natural ordering of the
+ * 'y' values (from the smallest to the largest) - this order must be enforced
+ * outside, the interface only draws stuff relying on this order
  */
 public interface Presenter
 {
