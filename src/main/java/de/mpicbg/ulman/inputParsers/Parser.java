@@ -12,20 +12,16 @@ package de.mpicbg.ulman.inputParsers;
 import de.mpicbg.ulman.Event;
 
 /**
- * a 'mining interface' that provides a basic operational schema
- * hasNext(), next(), get(),   readNextXYMsg()
+ * a 'mining interface' that provides a basic operational schema:
+ * hasNext(), next(), get()
  */
 public interface Parser
 {
-	///extracts and parses next event from the input log
-	void readNextXYMsg();
-
 	///indicates if there is some extractable event waiting in the input log
 	boolean hasNext();
 
-	///assumes hasNext() = true; it calls readNextXYMsg() and returns the extracted data
+	///assumes hasNext() = true; it calls readNextXYMsg() and get()
 	Event next();
-	//{ readNextXYMsg(); return get(); }
 
 	///returns the last extracted data
 	Event get();

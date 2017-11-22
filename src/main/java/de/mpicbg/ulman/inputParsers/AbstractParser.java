@@ -9,9 +9,58 @@
  */
 package de.mpicbg.ulman.inputParsers;
 
-//this class implements a minimal log readers
-//that provides readNextXYMsg() that returns
-//single fixed 'x', increasing values of 'y' with
-//every call and reads one line from input file into 'msg'
+import de.mpicbg.ulman.Event;
 
-//implements Parser
+/**
+ * this class implements a minimal log readers
+ * that provides readNextXYMsg() that returns
+ * single fixed 'x', increasing values of 'y'
+ * and some fake 'msg' with every call
+ */
+public class AbstractParser implements Parser
+{
+	///last extracted event
+	protected Event currentEvent
+		= new Event("wrong source",new Long(0),"should not see this one");
+
+	/**
+	 * a cached status of the input log "stream";
+	 * this attribute should be updated after every read
+	 * of the input "stream", that is in readNextXYMsg()
+	 */
+	protected boolean isThereNext = true;
+
+	@Override
+	public
+	boolean hasNext()
+	{ return isThereNext; }
+
+	@Override
+	public
+	Event next()
+	{ readNextXYMsg(); return get(); }
+
+	@Override
+	public
+	Event get()
+	{ return currentEvent; }
+
+	/**
+	 * this essentially an "abstract" (fake) log generator;
+	 * it should update this.isThereNext (which, in this
+	 * case, goes to 'false' after 20 issued events)
+	 */
+	private
+	void readNextXYMsg()
+	{
+		//basically a test event...
+		currentEvent.x = counter < 10? "source 2" : "source 1";
+		currentEvent.y = ++counter;
+		currentEvent.msg = "msg no #"+counter;
+
+		if (counter == 20) isThereNext = false;
+	}
+
+	///internal counter of how many log events have been created so far
+	private long counter = 0;
+}
