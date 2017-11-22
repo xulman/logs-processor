@@ -50,7 +50,7 @@ public class AbstractParser implements Parser
 	 * it should update this.isThereNext (which, in this
 	 * case, goes to 'false' after 20 issued events)
 	 */
-	private
+	protected
 	void readNextXYMsg()
 	{
 		//basically a test event from 4 sources
