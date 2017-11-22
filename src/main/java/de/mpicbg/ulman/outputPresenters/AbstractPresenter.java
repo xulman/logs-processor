@@ -14,13 +14,34 @@ package de.mpicbg.ulman.outputPresenters;
  */
 public class AbstractPresenter implements Presenter
 {
+	///backup of the hinting attributes
+	protected long xColumns;
+	protected long yMin,yMax;
+	protected long msgMaxLines;
+
+	///helper function to do the backup
+	protected
+	void backUpHints(final long _xColumns,
+	                 final long _yMin,
+	                 final long _yMax,
+	                 final long _msgMaxLines)
+	{
+		xColumns    = _xColumns;
+		yMin        = _yMin;
+		yMax        = _yMax;
+		msgMaxLines = _msgMaxLines;
+	}
+
 	@Override
 	public
-	void initialize(final long xColumns,
-	                final long yMin,
-	                final long yMax,
-	                final long msgMaxLines)
+	void initialize(final long _xColumns,
+	                final long _yMin,
+	                final long _yMax,
+	                final long _msgMaxLines)
 	{
+		//backup...
+		backUpHints(_xColumns, _yMin, _yMax, _msgMaxLines);
+
 		System.out.println("INIT: 0 <= x <= "+(xColumns-1)+", "
 			+yMin+" <= y <= "+yMax+", msgMaxLines: "+msgMaxLines);
 	}
