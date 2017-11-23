@@ -26,6 +26,7 @@ public interface Presenter
 	void initialize(final long xColumns,
 	                final long yMin,
 	                final long yMax,
+	                final long msgWidthChars,
 	                final long msgMaxLines);
 
 	///insert a "point" into the 2D world

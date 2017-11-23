@@ -17,6 +17,7 @@ public class AbstractPresenter implements Presenter
 	///backup of the hinting attributes
 	protected long xColumns;
 	protected long yMin,yMax;
+	protected long msgWidthChars;
 	protected long msgMaxLines;
 
 	///helper function to do the backup
@@ -24,12 +25,14 @@ public class AbstractPresenter implements Presenter
 	void backUpHints(final long _xColumns,
 	                 final long _yMin,
 	                 final long _yMax,
+	                 final long _msgWidthChars,
 	                 final long _msgMaxLines)
 	{
-		xColumns    = _xColumns;
-		yMin        = _yMin;
-		yMax        = _yMax;
-		msgMaxLines = _msgMaxLines;
+		xColumns      = _xColumns;
+		yMin          = _yMin;
+		yMax          = _yMax;
+		msgWidthChars = _msgWidthChars;
+		msgMaxLines   = _msgMaxLines;
 	}
 
 	@Override
@@ -37,13 +40,15 @@ public class AbstractPresenter implements Presenter
 	void initialize(final long _xColumns,
 	                final long _yMin,
 	                final long _yMax,
+	                final long _msgWidthChars,
 	                final long _msgMaxLines)
 	{
 		//backup...
-		backUpHints(_xColumns, _yMin, _yMax, _msgMaxLines);
+		backUpHints(_xColumns, _yMin,_yMax, _msgWidthChars,_msgMaxLines);
 
 		System.out.println("INIT: 0 <= x <= "+(xColumns-1)+", "
-			+yMin+" <= y <= "+yMax+", msgMaxLines: "+msgMaxLines);
+			+yMin+" <= y <= "+yMax+", msgWidthChars: "
+			+msgWidthChars+", msgMaxLines: "+msgMaxLines);
 	}
 
 	@Override

@@ -47,9 +47,10 @@ public class HTML extends AbstractPresenter
 	void initialize(final long _xColumns,
 	                final long _yMin,
 	                final long _yMax,
+	                final long _msgWidthChars,
 	                final long _msgMaxLines)
 	{
-		backUpHints(_xColumns, _yMin, _yMax, _msgMaxLines);
+		backUpHints(_xColumns, _yMin,_yMax, _msgWidthChars,_msgMaxLines);
 		ySpan = (yMax-yMin +1)*20*msgMaxLines;
 
 		try {
@@ -75,7 +76,7 @@ public class HTML extends AbstractPresenter
 			misto \n musi byt <br/>
 		*/
 		try {
-			long posX = 250 * getColumnNo(x);
+			long posX = 7*msgWidthChars * getColumnNo(x);
 			long posY = (ySpan*(y - yMin))/(yMax-yMin);
 			writer.append("<span style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
 			writer.append(msg);

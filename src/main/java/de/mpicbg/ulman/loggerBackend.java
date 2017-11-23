@@ -104,7 +104,7 @@ class loggerBackend
 
 
 		//finally, start "presenting" the stored logs
-		presenter.initialize(logs.size(), yMin,yMax, msgMaxLines);
+		presenter.initialize(logs.size(), yMin,yMax, msgWrap,msgMaxLines);
 
 		//iterate logged data in the correct order
 		for (String x : permutation.values())
