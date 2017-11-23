@@ -17,7 +17,7 @@ package de.mpicbg.ulman;
 public class Event
 {
 	public String x;
-	public Long   y;
+	public long   y;
 	public String msg;
 
 	public Event(final String _x, final Long _y, final String _msg)
