@@ -51,7 +51,8 @@ public class HTML extends AbstractPresenter
 	                final long _msgMaxLines)
 	{
 		backUpHints(_xColumns, _yMin,_yMax, _msgWidthChars,_msgMaxLines);
-		ySpan = (yMax-yMin)/1000*20*msgMaxLines;
+		ySpan = (yMax-yMin)*20*msgMaxLines;
+		//ySpan = (yMax-yMin)/1000*20*msgMaxLines; - when timestamps are involved...
 
 		try {
 			writer.append("<body>");

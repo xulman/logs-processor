@@ -70,7 +70,10 @@ public class DAISwp13 extends AbstractParser
 			*/
 
 			final int delimIdx = line.indexOf(':');
+			//time stamps as 'y'
 			currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
+			//line number as 'y'
+			currentEvent.y = ++counter;
 
 			final String restOfLine = line.substring(delimIdx+2);
 			currentEvent.x = (restOfLine.startsWith("se") || restOfLine.startsWith("Se"))? "S" : "R";
@@ -81,4 +84,6 @@ public class DAISwp13 extends AbstractParser
 			 throw new RuntimeException();
 		}
 	}
+
+	private long counter = 0;
 }
