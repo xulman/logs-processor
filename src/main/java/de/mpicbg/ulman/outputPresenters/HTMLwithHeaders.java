@@ -37,7 +37,7 @@ public class HTMLwithHeaders extends HTML
 			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
 
 			final Iterator<String> i = e.msg.iterator();
-			writer.append("<div style=\"color: brown; position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
+			writer.append("<div style=\"color: brown; border-top: 1px dotted black; position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
 			//always visible title/header
 			writer.append(i.next());
 			writer.append("</div>");
