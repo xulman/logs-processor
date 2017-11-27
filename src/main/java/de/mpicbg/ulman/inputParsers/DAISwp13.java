@@ -16,7 +16,7 @@ import java.nio.file.Files;
 
 /**
  * this class implements a log reader for
- * DAIS wp1.3, a image transfer mini-library
+ * DAIS wp1.3 -- an image transfer mini-library
  */
 public class DAISwp13 extends AbstractParser
 {
@@ -60,24 +60,24 @@ public class DAISwp13 extends AbstractParser
 				isThereNext = false;
 			}
 
-			//first word of the log message is the 'x' -- the message source
-			//currentEvent.x = line.substring(0, line.indexOf(' '));
+			//prepare message container
+			currentEvent.msg.clear();
 
-			/* counts lines:
-			currentEvent.x = (line.startsWith("se") || line.startsWith("Se"))? "S" : "R";
-			currentEvent.y = ++counter;
-			currentEvent.msg = line;
-			*/
-
+			//the message title
 			final int delimIdx = line.indexOf(':');
+			currentEvent.msg.add(String.format("%.3f secs",
+			                       Float.parseFloat(line.substring(0,delimIdx-1))/1000.));
 			//time stamps as 'y'
-			currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
+			//currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
 			//line number as 'y'
-			currentEvent.y = ++counter;
+			currentEvent.y = counter;
+			counter += 1;
+			//NB: were utilizing Event.title here, hence consider 2 lines per event
 
+			//the message body
 			final String restOfLine = line.substring(delimIdx+2);
 			currentEvent.x = (restOfLine.startsWith("se") || restOfLine.startsWith("Se"))? "S" : "R";
-			currentEvent.msg = restOfLine;
+			currentEvent.msg.add(restOfLine);
 		}
 		catch (IOException e) {
 			 System.err.format("IOException: %s%n", e);
@@ -85,5 +85,5 @@ public class DAISwp13 extends AbstractParser
 		}
 	}
 
-	private long counter = 0;
+	private long counter = 1;
 }

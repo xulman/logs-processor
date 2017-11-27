@@ -9,6 +9,8 @@
  */
 package de.mpicbg.ulman.outputPresenters;
 
+import de.mpicbg.ulman.Event;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +105,7 @@ public class HTML extends AbstractPresenter
 
 	@Override
 	public
-	void show(final String x, final long y, final String msg)
+	void show(final Event e)
 	{
 		/*
 		notes:
@@ -112,20 +114,26 @@ public class HTML extends AbstractPresenter
 			misto \n musi byt <br/>
 		*/
 		try {
-			long posX = padding+ (10 + xCharStep*msgWidthChars) * getColumnNo(x);
-			long posY = padding+ (ySpan*(y - yMin))/(yMax-yMin);
-			long msgTrim = Math.min(msgWidthChars, msg.length());
+			//position
+			final long posX = padding+ (10 + xCharStep*msgWidthChars) * getColumnNo(e.x);
+			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
+
 			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
-			writer.append(msg.substring(0,(int)msgTrim));
+			//always visible content
+			writer.append(e.msg.firstElement());
 			writer.newLine();
 			writer.append("<span class=\"tooltiptext\">");
-			writer.append(msg);
+			for (String msg : e.msg)
+			{
+				writer.append(msg);
+				writer.append("<br/>");
+			}
 			writer.newLine();
 			writer.append("</span></div>");
 			writer.newLine();
 		}
-		catch (IOException e) {
-			 System.err.format("IOException: %s%n", e);
+		catch (IOException E) {
+			 System.err.format("IOException: %s%n", E);
 			 throw new RuntimeException();
 		}
 	}
