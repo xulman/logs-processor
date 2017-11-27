@@ -9,6 +9,8 @@
  */
 package de.mpicbg.ulman.outputPresenters;
 
+import de.mpicbg.ulman.Event;
+
 /**
  * interface that knows how to display the (x,y,msg) input triples
  *
@@ -30,7 +32,7 @@ public interface Presenter
 	                final long msgMaxLines);
 
 	///insert a "point" into the 2D world
-	void show(final String x, final long y, final String msg);
+	void show(final Event e);
 
 	///to some final clean ups, e.g., annotation of axes
 	void close();
