@@ -82,11 +82,23 @@ public class HTML extends AbstractPresenter
 +"    left: -"+padding+"px;\n"
 +"}\n"
 +"\n"
++".background {\n"
++"    position: absolute;\n"
++"    top: 0px;\n"
++"    width: "+(xCharStep*msgWidthChars)+"px;\n"
++"    height: "+(yCharStep*(yMax-yMin+2))+"px;\n"
++"}\n"
++"\n"
 +".tooltip:hover .tooltiptext {\n"
 +"    visibility: visible;\n"
 +"}\n"
 +"</style>\n"
 +"<body>\n");
+			final String[] colors = {"ffffcc", "d9ffcc", "ffe6cc", "ccf2ff"};
+			for (int i=0; i < xColumns; ++i)
+				writer.append("<div class=\"background\" style=\"background-color:#"+
+				  colors[i%4]+"; left:"+
+				  (padding+ (10 + xCharStep*msgWidthChars)*i)+"px;\"></div>\n");
 		}
 		catch (IOException e) {
 			 System.err.format("IOException: %s%n", e);
