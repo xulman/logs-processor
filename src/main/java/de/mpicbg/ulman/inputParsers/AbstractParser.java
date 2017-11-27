@@ -48,7 +48,7 @@ public class AbstractParser implements Parser
 	@Override
 	public
 	Event get()
-	{ return currentEvent; }
+	{ return new Event(currentEvent); }
 
 	/**
 	 * this essentially an "abstract" (fake) log generator;
@@ -61,7 +61,8 @@ public class AbstractParser implements Parser
 		//basically a test event from 4 sources
 		currentEvent.x = "source "+(counter % 4);
 		currentEvent.y = 100 - (++counter);
-		currentEvent.msg = "msg no #"+counter;
+		currentEvent.msg.clear();
+		currentEvent.msg.add("msg no #"+counter);
 
 		if (counter == 20) isThereNext = false;
 	}

@@ -9,6 +9,8 @@
  */
 package de.mpicbg.ulman.outputPresenters;
 
+import de.mpicbg.ulman.Event;
+
 /**
  * this class just prints coordinates and messages on the standard output
  */
@@ -53,9 +55,10 @@ public class AbstractPresenter implements Presenter
 
 	@Override
 	public
-	void show(final String x, final long y, final String msg)
+	void show(final Event e)
 	{
-		System.out.println("MSG from \""+x+"\": "+getColumnNo(x)+","+y+": "+msg);
+		for (String msg : e.msg)
+			System.out.println("MSG from \""+e.x+"\": "+getColumnNo(e.x)+","+e.y+": "+msg);
 	}
 
 	@Override
