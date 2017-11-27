@@ -27,6 +27,11 @@ public class AbstractParser implements Parser
 	 * a cached status of the input log "stream";
 	 * this attribute should be updated after every read
 	 * of the input "stream", that is in readNextXYMsg()
+	 *
+	 * It is assumed that any new parser would extend this class
+	 * and override readNextXYMsg() to feed \e this.currentEvent,
+	 * the overridden readNextXYMsg() MUST update \e this.isThereNext
+	 * accordingly.
 	 */
 	protected boolean isThereNext = true;
 
