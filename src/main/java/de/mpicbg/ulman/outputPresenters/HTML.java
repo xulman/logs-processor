@@ -51,18 +51,53 @@ public class HTML extends AbstractPresenter
 	                final long _msgMaxLines)
 	{
 		backUpHints(_xColumns, _yMin,_yMax, _msgWidthChars,_msgMaxLines);
-		ySpan = (yMax-yMin)*20*msgMaxLines;
-		//ySpan = (yMax-yMin)/1000*20*msgMaxLines; - when timestamps are involved...
+		ySpan = (yMax-yMin)*yCharStep; //*msgMaxLines;
 
 		try {
-			writer.append("<body>");
-			writer.newLine();
+			writer.append(
+ "<!DOCTYPE html>\n"
++"<!-- Adopted from: https://www.w3schools.com/css/css_tooltip.asp -->\n"
++"<html>\n"
++"<style>\n"
++".tooltip {\n"
++"    position: relative;\n"
++"    display: inline-block;\n"
++"}\n"
++"\n"
++".tooltip .tooltiptext {\n"
++"    visibility: hidden;\n"
++"    width: "+(xCharStep*msgWidthChars)+"px;\n"
++"    background-color: #eee;\n"
++"    color: black;\n"
++"    text-align: left;\n"
++"    border-radius: 6px;\n"
++"    padding: "+padding+"px "+padding+"px;\n"
++"\n"
++"    /* Position the tooltip */\n"
++"    position: absolute;\n"
++"    z-index: 1;\n"
++"    top: -"+padding+"px;\n"
++"    left: -"+padding+"px;\n"
++"}\n"
++"\n"
++".tooltip:hover .tooltiptext {\n"
++"    visibility: visible;\n"
++"}\n"
++"</style>\n"
++"<body>\n");
 		}
 		catch (IOException e) {
 			 System.err.format("IOException: %s%n", e);
 			 throw new RuntimeException();
 		}
 	}
+
+	///in the tooltip: border thickness around the text
+	private long padding = 3;
+
+	///approx/mean width and height of a box (in pixels) required to host one character
+	private long xCharStep = 8;
+	private long yCharStep = 20;
 
 	private long ySpan;
 
@@ -77,11 +112,16 @@ public class HTML extends AbstractPresenter
 			misto \n musi byt <br/>
 		*/
 		try {
-			long posX = 7*msgWidthChars * getColumnNo(x);
-			long posY = (ySpan*(y - yMin))/(yMax-yMin);
-			writer.append("<span style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
+			long posX = padding+ (10 + xCharStep*msgWidthChars) * getColumnNo(x);
+			long posY = padding+ (ySpan*(y - yMin))/(yMax-yMin);
+			long msgTrim = Math.min(msgWidthChars, msg.length());
+			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
+			writer.append(msg.substring(0,(int)msgTrim));
+			writer.newLine();
+			writer.append("<span class=\"tooltiptext\">");
 			writer.append(msg);
-			writer.append("</span>");
+			writer.newLine();
+			writer.append("</span></div>");
 			writer.newLine();
 		}
 		catch (IOException e) {
@@ -95,7 +135,7 @@ public class HTML extends AbstractPresenter
 	void close()
 	{
 		try {
-			writer.append("</body>");
+			writer.append("</body>\n</html>");
 			writer.close();
 		}
 		catch (IOException e) {

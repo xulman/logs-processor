@@ -93,7 +93,7 @@ public class loggerFrontend implements Command
 
 			//create the loggerBackend, and use it
 			loggerBackend lb = new loggerBackend(pa,pr);
-			lb.msgWrap = 80;
+			lb.msgWrap = 50;
 			lb.process();
 		}
 		catch (RuntimeException e) {
