@@ -71,7 +71,7 @@ public class DAISwp13 extends AbstractParser
 			//currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
 			//line number as 'y'
 			currentEvent.y = counter;
-			counter += 1;
+			counter += 2;
 			//NB: were utilizing Event.title here, hence consider 2 lines per event
 
 			//the message body

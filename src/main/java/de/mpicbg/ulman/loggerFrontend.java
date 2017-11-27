@@ -52,6 +52,7 @@ public class loggerFrontend implements Command
 	@Parameter(label = "Output log presenter:",
 		choices = {"Simple console writer",
 		           "HTML file",
+		           "HTMLwithHeaders file",
 		           "SVG image"})
 	public String outputPresenter;
 
@@ -78,8 +79,11 @@ public class loggerFrontend implements Command
 					//default (debugging) parser
 					pa = new AbstractParser();
 
-				if (outputPresenter.startsWith("HTML"))
+				if (outputPresenter.startsWith("HTML "))
 					pr = new HTML(new File("/tmp/dais_log.html"));
+				else
+				if (outputPresenter.startsWith("HTMLw"))
+					pr = new HTMLwithHeaders(new File("/tmp/dais_log.html"));
 				else
 				if (outputPresenter.startsWith("SVG"))
 					pr = null; //new DAISwp13("file");
@@ -130,7 +134,7 @@ public class loggerFrontend implements Command
 		//parse and store the arguments, if necessary
 		miniMe.inLogFile = new File("/tmp/dais_log.txt");
 		miniMe.inputParser = "DAIS parser";
-		miniMe.outputPresenter = "HTML presenter";
+		miniMe.outputPresenter = "HTMLw presenter";
 
 		miniMe.run();
 	}
