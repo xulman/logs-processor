@@ -95,13 +95,13 @@ public class HTML extends AbstractPresenter
 	}
 
 	///in the tooltip: border thickness around the text
-	private long padding = 3;
+	protected long padding = 3;
 
 	///approx/mean width and height of a box (in pixels) required to host one character
-	private long xCharStep = 8;
-	private long yCharStep = 20;
+	protected long xCharStep = 8;
+	protected long yCharStep = 20;
 
-	private long ySpan;
+	protected long ySpan;
 
 	@Override
 	public
