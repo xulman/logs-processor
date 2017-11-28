@@ -197,6 +197,10 @@ class loggerBackend
 			currentLength = bckp;
 		}
 
+		//adjust also the interval of 'y' (row) coordinates that will come
+		yMin = 0;
+		yMax = yMarkers[yMarkers.length-1]+currentLength -1;
+
 		//finally, start "presenting" the stored logs
 		presenter.initialize(logs.size(), yMin,yMax, msgWrap,msgMaxLines);
 
@@ -227,7 +231,6 @@ class loggerBackend
 				final Event e = xLog.get(y);
 				//convert "time stamp" y to a "row coordinate"
 				e.y = yMarkers[currentMarker] + orderWithinMarker -1;
-				e.y *= 2;
 
 				presenter.show(e);
 			}
