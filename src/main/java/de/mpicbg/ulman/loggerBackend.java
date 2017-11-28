@@ -129,6 +129,42 @@ class loggerBackend
 		//NB:    'y'  'x'
 		for (String x : logs.keySet()) permutation.put(logs.get(x).firstKey(), x);
 
+		//now, convert time stamps into (table) row numbers such that presenters can produce
+		//dense/compact views (if time-stamps were too apart from each other, this manifested
+		//itself as a long empty space between displays of the consecutive events) and allow
+		//multiple readers to occupy the same (table) row (of course, in their respective columns)
+		//
+		//we gonna introduce a set of row markers on the y-axis, every marker binds a particular
+		//row number with a time stamp; no event with earlier time stamp should be displayed
+		//above (with smaller row number) this marker; the spacing between consecutive markers
+		//is driven only by the amount of events that fall between the two markers -- so markers
+		//row-spacing is not regular/fixed, but spacing of markers on the time stamp axis is
+		//regular to ease the computation/programming
+		//
+		//a marker at index m gathers all events e for which it holds:
+		//  ceil((e.y-yMin) / yTimeStep) = m
+		//and these events must be displayed at y-coordinates between yMarkers[m] and yMarkers[m+1]
+		long yMarkers[] = new long[(int)((yMax-yMin) / yTimeStep) +1];
+
+		//plan:
+		//first pass: for every marker index m, count maximum, over all sources 'x',
+		//            number of events that fall into the index m
+		//second pass: adjust yMarkers[] values accordingly
+
+		//first pass: for every marker index m, count maximum, over all sources 'x',
+		//            number of events that fall into the index m
+		//TODO
+
+		//second pass: adjust yMarkers[] values accordingly,
+		//i.e. yMarkers[m] = sum_i=0..m-1 yMarkers[i] and yMarkers[0] = 0;
+		long currentLength = yMarkers[0]; //max number of events that fall into 0-th marker
+		yMarkers[0] = 0;                  //min y-row-coordinate of these events
+		for (int i=1; i < yMarkers.length; ++i)
+		{
+			final long bckp = yMarkers[i];
+			yMarkers[i] = yMarkers[i-1]+currentLength;
+			currentLength = bckp;
+		}
 
 		//finally, start "presenting" the stored logs
 		presenter.initialize(logs.size(), yMin,yMax, msgWrap,msgMaxLines);
