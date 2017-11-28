@@ -56,15 +56,21 @@ public class loggerFrontend implements Command
 		           "SVG image"})
 	public String outputPresenter;
 
+	@Parameter(label = "Path to output file:",
+		columns = 40, style = FileWidget.SAVE_STYLE,
+		description = "Some log presenters will write to this file, others will just ignore it.")
+	public File outputFile;
+
 
 	//the GUI path entry function:
 	@Override
 	public void run()
 	{
 		try {
-			System.out.println("read in file: "+inLogFile);
-			System.out.println("parser      : "+inputParser);
-			System.out.println("presenter   : "+outputPresenter);
+			System.out.println("read in file : "+inLogFile);
+			System.out.println("parser       : "+inputParser);
+			System.out.println("presenter    : "+outputPresenter);
+			System.out.println("write to file: "+outputFile);
 
 			//initialize the appropriate parser and presenter
 			Parser pa = null;
@@ -74,19 +80,19 @@ public class loggerFrontend implements Command
 					pa = new DAISwp13(inLogFile);
 				else
 				if (inputParser.startsWith("MitoGen"))
-					pa = null; //new MitoGen(inLogFile);
+					pa = new MitoGen(inLogFile);
 				else
 					//default (debugging) parser
 					pa = new AbstractParser();
 
 				if (outputPresenter.startsWith("HTML "))
-					pr = new HTML(new File("/tmp/dais_log.html"));
+					pr = new HTML(outputFile);
 				else
 				if (outputPresenter.startsWith("HTMLw"))
-					pr = new HTMLwithHeaders(new File("/tmp/dais_log.html"));
+					pr = new HTMLwithHeaders(outputFile);
 				else
 				if (outputPresenter.startsWith("SVG"))
-					pr = null; //new DAISwp13("file");
+					pr = null; //new SVG(outputFile);
 				else
 					//default (debugging) presenter
 					pr = new AbstractPresenter();
@@ -132,9 +138,10 @@ public class loggerFrontend implements Command
 		final loggerFrontend miniMe = new loggerFrontend();
 
 		//parse and store the arguments, if necessary
-		miniMe.inLogFile = new File("/tmp/dais_log.txt");
-		miniMe.inputParser = "DAIS parser";
+		miniMe.inLogFile = new File("/tmp/mitogen_log.txt");
+		miniMe.inputParser = "MitoGen parser";
 		miniMe.outputPresenter = "HTMLw presenter";
+		miniMe.outputFile = new File("/tmp/mitogen_log.html");
 
 		miniMe.run();
 	}
