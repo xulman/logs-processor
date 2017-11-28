@@ -26,11 +26,12 @@ public class HTML extends AbstractPresenter
 
 	///constructor
 	public
-	HTML(final File htmlFile)
+	HTML(final File htmlFile, final int _columnWidthChars)
 	throws IOException
 	{
 		//create the HTML file
 		writer = Files.newBufferedWriter(htmlFile.toPath());
+		columnWidthChars = _columnWidthChars;
 	}
 
 	protected void finalize()
@@ -43,6 +44,8 @@ public class HTML extends AbstractPresenter
 		catch (IOException e)
 		{ } //just don't complain
 	}
+
+	final int columnWidthChars;
 
 	@Override
 	public
@@ -85,7 +88,7 @@ public class HTML extends AbstractPresenter
 +".background {\n"
 +"    position: absolute;\n"
 +"    top: 0px;\n"
-+"    width: "+(xCharStep*msgWidthChars)+"px;\n"
++"    width: "+(xCharStep*columnWidthChars)+"px;\n"
 +"    height: "+(yCharStep*(yMax-yMin+2))+"px;\n"
 +"}\n"
 +"\n"
@@ -98,7 +101,7 @@ public class HTML extends AbstractPresenter
 			for (int i=0; i < xColumns; ++i)
 				writer.append("<div class=\"background\" style=\"background-color:#"+
 				  colors[i%4]+"; left:"+
-				  (padding+ (10 + xCharStep*msgWidthChars)*i)+"px;\"></div>\n");
+				  (padding+ (10 + xCharStep*columnWidthChars)*i)+"px;\"></div>\n");
 		}
 		catch (IOException e) {
 			 System.err.format("IOException: %s%n", e);
@@ -127,12 +130,18 @@ public class HTML extends AbstractPresenter
 		*/
 		try {
 			//position
-			final long posX = padding+ (10 + xCharStep*msgWidthChars) * getColumnNo(e.x);
+			final long posX = padding+ (10 + xCharStep*columnWidthChars) * getColumnNo(e.x);
 			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
 
 			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
 			//always visible content
-			writer.append(e.msg.firstElement());
+			final String visLine = e.msg.firstElement();
+			if (visLine.length() < columnWidthChars)
+				//the whole line fits the column width
+				writer.append(visLine);
+			else
+				//the line has to be trimmed
+				writer.append(visLine.substring(0,columnWidthChars-3)+"...");
 			writer.newLine();
 			writer.append("<span class=\"tooltiptext\">");
 			for (String msg : e.msg)

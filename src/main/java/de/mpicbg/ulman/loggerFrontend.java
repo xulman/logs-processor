@@ -86,10 +86,10 @@ public class loggerFrontend implements Command
 					pa = new AbstractParser();
 
 				if (outputPresenter.startsWith("HTML "))
-					pr = new HTML(outputFile);
+					pr = new HTML(outputFile,50);
 				else
 				if (outputPresenter.startsWith("HTMLw"))
-					pr = new HTMLwithHeaders(outputFile);
+					pr = new HTMLwithHeaders(outputFile,50);
 				else
 				if (outputPresenter.startsWith("SVG"))
 					pr = null; //new SVG(outputFile);
@@ -103,7 +103,12 @@ public class loggerFrontend implements Command
 
 			//create the loggerBackend, and use it
 			loggerBackend lb = new loggerBackend(pa,pr);
-			lb.msgWrap = 50;
+
+			//don't wrap lines for the HTML outputs
+			if (outputPresenter.startsWith("HTML")) lb.msgWrap = 200;
+			//else, possibly adjustable from the GUI anyways
+			else lb.msgWrap = 50;
+
 			lb.process();
 		}
 		catch (RuntimeException e) {

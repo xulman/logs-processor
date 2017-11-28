@@ -21,10 +21,10 @@ import java.util.Iterator;
 public class HTMLwithHeaders extends HTML
 {
 	public
-	HTMLwithHeaders(final File htmlFile)
+	HTMLwithHeaders(final File htmlFile, final int _columnWidthChars)
 	throws IOException
 	{
-		super(htmlFile);
+		super(htmlFile, _columnWidthChars);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class HTMLwithHeaders extends HTML
 	{
 		try {
 			//position
-			final long posX = padding+ (10 + xCharStep*msgWidthChars) * getColumnNo(e.x);
+			final long posX = padding+ (10 + xCharStep*columnWidthChars) * getColumnNo(e.x);
 			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
 
 			final Iterator<String> i = e.msg.iterator();
@@ -45,7 +45,12 @@ public class HTMLwithHeaders extends HTML
 			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+(posY+yCharStep)+"px;\">");
 			final String tmp = i.next();
 			//always visible content
-			writer.append(tmp);
+			if (tmp.length() < columnWidthChars)
+				//the whole line fits the column width
+				writer.append(tmp);
+			else
+				//the line has to be trimmed
+				writer.append(tmp.substring(0,columnWidthChars-3)+"...");
 			writer.newLine();
 			writer.append("<span class=\"tooltiptext\">");
 			writer.append(tmp);
