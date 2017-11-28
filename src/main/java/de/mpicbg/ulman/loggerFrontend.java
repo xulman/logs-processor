@@ -102,7 +102,7 @@ public class loggerFrontend implements Command
 			}
 
 			//create the loggerBackend, and use it
-			loggerBackend lb = new loggerBackend(pa,pr,5);
+			loggerBackend lb = new loggerBackend(pa,pr,pa.getTypicalTimeResolution());
 
 			//don't wrap lines for the HTML outputs
 			if (outputPresenter.startsWith("HTML")) lb.msgWrap = 200;

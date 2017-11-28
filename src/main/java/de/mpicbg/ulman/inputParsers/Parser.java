@@ -25,4 +25,7 @@ public interface Parser
 
 	///returns the last extracted data
 	Event get();
+
+	///returns default appropriate size of time point window, see loggerBackend.yTimeStep
+	long getTypicalTimeResolution();
 }

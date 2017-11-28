@@ -69,4 +69,9 @@ public class AbstractParser implements Parser
 
 	///internal counter of how many log events have been created so far
 	private long counter = 0;
+
+	@Override
+	public
+	long getTypicalTimeResolution()
+	{ return 1; }
 }
