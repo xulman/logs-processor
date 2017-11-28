@@ -64,9 +64,17 @@ public class HTML extends AbstractPresenter
 +"<!-- Adopted from: https://www.w3schools.com/css/css_tooltip.asp -->\n"
 +"<html>\n"
 +"<style>\n"
++".toolhead {\n"
++"    color: brown;\n"
++"    border-top: 1px dotted black;\n"
++"    position: absolute;\n"
++"    width: "+(xCharStep*columnWidthChars)+"px;\n"
++"}\n"
++"\n"
 +".tooltip {\n"
-+"    position: relative;\n"
++"    position: absolute;\n"
 +"    display: inline-block;\n"
++"    width: "+(xCharStep*columnWidthChars)+"px;\n"
 +"}\n"
 +"\n"
 +".tooltip .tooltiptext {\n"
@@ -133,7 +141,7 @@ public class HTML extends AbstractPresenter
 			final long posX = padding+ (10 + xCharStep*columnWidthChars) * getColumnNo(e.x);
 			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
 
-			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
+			writer.append("<div class=\"tooltip\" style=\"left:"+posX+"px; top:"+posY+"px;\">");
 			//always visible content
 			final String visLine = e.msg.firstElement();
 			if (visLine.length() < columnWidthChars)

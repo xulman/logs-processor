@@ -37,12 +37,12 @@ public class HTMLwithHeaders extends HTML
 			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
 
 			final Iterator<String> i = e.msg.iterator();
-			writer.append("<div style=\"color: brown; border-top: 1px dotted black; position:absolute; left:"+posX+"px; top:"+posY+"px;\">");
+			writer.append("<div class=\"toolhead\" style=\"left:"+posX+"px; top:"+posY+"px;\">");
 			//always visible title/header
 			writer.append(i.next());
 			writer.append("</div>");
 			writer.newLine();
-			writer.append("<div class=\"tooltip\" style=\"position:absolute; left:"+posX+"px; top:"+(posY+yCharStep)+"px;\">");
+			writer.append("<div class=\"tooltip\"  style=\"left:"+posX+"px; top:"+(posY+yCharStep)+"px;\">");
 			final String tmp = i.next();
 			//always visible content
 			if (tmp.length() < columnWidthChars)
