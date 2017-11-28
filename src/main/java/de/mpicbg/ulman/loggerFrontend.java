@@ -144,7 +144,7 @@ public class loggerFrontend implements Command
 
 		//parse and store the arguments, if necessary
 		miniMe.inLogFile = new File("/tmp/dais_log.txt");
-		miniMe.inputParser = "MitoGen parser";
+		miniMe.inputParser = "DAIS parser";
 		miniMe.outputPresenter = "HTMLw presenter";
 		miniMe.outputFile = new File("/tmp/dais_log.html");
 

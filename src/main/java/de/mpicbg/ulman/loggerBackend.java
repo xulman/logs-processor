@@ -153,7 +153,38 @@ class loggerBackend
 
 		//first pass: for every marker index m, count maximum, over all sources 'x',
 		//            number of events that fall into the index m
-		//TODO
+		for (TreeMap<Long,Event> xLog : logs.values())
+		{
+			int currentMarker = 0;
+			long orderWithinMarker = 0;
+
+			for (Long y : xLog.keySet())
+			{
+				//convert "time stamp" y to a marker index m
+				final int m = (int)((y-yMin) / yTimeStep);
+				if (m == currentMarker)
+				{
+					//still in the same marker as before
+					++orderWithinMarker;
+				}
+				else
+				{
+					//entered a new marker:
+					//any further event shall not enter currentMarker anymore,
+					//nor any of the previous markers... adjust the stats then
+					if (orderWithinMarker > yMarkers[currentMarker])
+						yMarkers[currentMarker] = orderWithinMarker;
+
+					//and "enter" a new marker
+					currentMarker = m;
+					orderWithinMarker = 1;
+				}
+			}
+
+			//update stats of the last marker too
+			if (orderWithinMarker > yMarkers[currentMarker])
+				yMarkers[currentMarker] = orderWithinMarker;
+		}
 
 		//second pass: adjust yMarkers[] values accordingly,
 		//i.e. yMarkers[m] = sum_i=0..m-1 yMarkers[i] and yMarkers[0] = 0;
@@ -196,6 +227,7 @@ class loggerBackend
 				final Event e = xLog.get(y);
 				//convert "time stamp" y to a "row coordinate"
 				e.y = yMarkers[currentMarker] + orderWithinMarker -1;
+				e.y *= 2;
 
 				presenter.show(e);
 			}
