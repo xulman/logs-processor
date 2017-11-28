@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- Adopted from: https://www.w3schools.com/css/css_tooltip.asp -->
+<html>
+<style>
+.toolhead {
+    color: brown;
+    border-top: 1px dotted black;
+    position: absolute;
+    width: 400px;
+}
+
+.tooltip {
+    position: absolute;
+    display: inline-block;
+    width: 400px;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 1600px;
+    background-color: #eee;
+    color: black;
+    text-align: left;
+    border-radius: 6px;
+    padding: 3px 3px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -3px;
+    left: -3px;
+}
+
+.background {
+    position: absolute;
+    top: 0px;
+    width: 400px;
+    height: 680px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
+<body>
+<div class="background" style="background-color:#ffffcc; left:3px;"></div>
+<div class="background" style="background-color:#d9ffcc; left:413px;"></div>
+<div class="toolhead" style="left:3px; top:3px;">0.002 secs</div>
+<div class="tooltip"  style="left:3px; top:23px;">receiver started
+<span class="tooltiptext">receiver started
+</span></div>
+<div class="toolhead" style="left:3px; top:43px;">0.085 secs</div>
+<div class="tooltip"  style="left:3px; top:63px;">receiver waiting
+<span class="tooltiptext">receiver waiting
+</span></div>
+<div class="toolhead" style="left:3px; top:83px;">10.120 secs</div>
+<div class="tooltip"  style="left:3px; top:103px;">receiver waiting already 10 seconds
+<span class="tooltiptext">receiver waiting already 10 seconds
+</span></div>
+<div class="toolhead" style="left:3px; top:123px;">20.153 secs</div>
+<div class="tooltip"  style="left:3px; top:143px;">receiver waiting already 20 seconds
+<span class="tooltiptext">receiver waiting already 20 seconds
+</span></div>
+<div class="toolhead" style="left:3px; top:283px;">23.163 secs</div>
+<div class="tooltip"  style="left:3px; top:303px;">received header: v1 dimNumber 2 256 254 Unsigne...
+<span class="tooltiptext">received header: v1 dimNumber 2 256 254 UnsignedByteType PlanarImg 
+</span></div>
+<div class="toolhead" style="left:3px; top:323px;">23.164 secs</div>
+<div class="tooltip"  style="left:3px; top:343px;">receiving the image...
+<span class="tooltiptext">receiving the image...
+</span></div>
+<div class="toolhead" style="left:3px; top:403px;">24.166 secs</div>
+<div class="tooltip"  style="left:3px; top:423px;">receiving finished...
+<span class="tooltiptext">receiving finished...
+</span></div>
+<div class="toolhead" style="left:3px; top:443px;">24.167 secs</div>
+<div class="tooltip"  style="left:3px; top:463px;">receiver finished
+<span class="tooltiptext">receiver finished
+</span></div>
+<div class="toolhead" style="left:3px; top:483px;">24.167 secs</div>
+<div class="tooltip"  style="left:3px; top:503px;">receiver cleaning
+<span class="tooltiptext">receiver cleaning
+</span></div>
+<div class="toolhead" style="left:3px; top:523px;">24.867 secs</div>
+<div class="tooltip"  style="left:3px; top:543px;">ReceiveImage plugin: received blobs.gif
+<span class="tooltiptext">ReceiveImage plugin: received blobs.gif
+</span></div>
+<div class="toolhead" style="left:413px; top:163px;">22.153 secs</div>
+<div class="tooltip"  style="left:413px; top:183px;">SendImage plugin: sending blobs.gif
+<span class="tooltiptext">SendImage plugin: sending blobs.gif
+</span></div>
+<div class="toolhead" style="left:413px; top:203px;">23.051 secs</div>
+<div class="tooltip"  style="left:413px; top:223px;">sender started
+<span class="tooltiptext">sender started
+</span></div>
+<div class="toolhead" style="left:413px; top:243px;">23.059 secs</div>
+<div class="tooltip"  style="left:413px; top:263px;">sending header: v1 dimNumber 2 256 254 Unsigned...
+<span class="tooltiptext">sending header: v1 dimNumber 2 256 254 UnsignedByteType PlanarImg 
+</span></div>
+<div class="toolhead" style="left:413px; top:363px;">24.066 secs</div>
+<div class="tooltip"  style="left:413px; top:383px;">sending the image...
+<span class="tooltiptext">sending the image...
+</span></div>
+<div class="toolhead" style="left:413px; top:563px;">25.069 secs</div>
+<div class="tooltip"  style="left:413px; top:583px;">sending finished...
+<span class="tooltiptext">sending finished...
+</span></div>
+<div class="toolhead" style="left:413px; top:603px;">25.069 secs</div>
+<div class="tooltip"  style="left:413px; top:623px;">sender finished
+<span class="tooltiptext">sender finished
+</span></div>
+<div class="toolhead" style="left:413px; top:643px;">25.070 secs</div>
+<div class="tooltip"  style="left:413px; top:663px;">sender cleaning
+<span class="tooltiptext">sender cleaning
+</span></div>
+</body>
+</html>

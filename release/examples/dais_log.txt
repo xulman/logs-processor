@@ -1,0 +1,17 @@
+2 : receiver started
+85 : receiver waiting
+10120 : receiver waiting already 10 seconds
+20153 : receiver waiting already 20 seconds
+22153 : SendImage plugin: sending blobs.gif
+23051 : sender started
+23059 : sending header: v1 dimNumber 2 256 254 UnsignedByteType PlanarImg 
+23163 : received header: v1 dimNumber 2 256 254 UnsignedByteType PlanarImg 
+23164 : receiving the image...
+24066 : sending the image...
+24166 : receiving finished...
+24167 : receiver finished
+24167 : receiver cleaning
+24867 : ReceiveImage plugin: received blobs.gif
+25069 : sending finished...
+25069 : sender finished
+25070 : sender cleaning
