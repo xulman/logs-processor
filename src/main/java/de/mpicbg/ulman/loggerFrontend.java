@@ -102,7 +102,7 @@ public class loggerFrontend implements Command
 			}
 
 			//create the loggerBackend, and use it
-			loggerBackend lb = new loggerBackend(pa,pr);
+			loggerBackend lb = new loggerBackend(pa,pr,5);
 
 			//don't wrap lines for the HTML outputs
 			if (outputPresenter.startsWith("HTML")) lb.msgWrap = 200;
@@ -143,10 +143,10 @@ public class loggerFrontend implements Command
 		final loggerFrontend miniMe = new loggerFrontend();
 
 		//parse and store the arguments, if necessary
-		miniMe.inLogFile = new File("/tmp/mitogen_log.txt");
+		miniMe.inLogFile = new File("/tmp/dais_log.txt");
 		miniMe.inputParser = "MitoGen parser";
 		miniMe.outputPresenter = "HTMLw presenter";
-		miniMe.outputFile = new File("/tmp/mitogen_log.html");
+		miniMe.outputFile = new File("/tmp/dais_log.html");
 
 		miniMe.run();
 	}

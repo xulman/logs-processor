@@ -22,11 +22,17 @@ class loggerBackend
 	///no default/easy construction allowed
 	@SuppressWarnings("unused")
 	private loggerBackend()
-	{ parser = null; presenter = null; }
+	{
+		parser = null; presenter = null;
+		yTimeStep = 1;
+	}
 
 	///this is the main constructor; cannot switch parser/presenter during operation
-	loggerBackend(final Parser _pa, final Presenter _pr)
-	{ parser = _pa; presenter = _pr; }
+	loggerBackend(final Parser _pa, final Presenter _pr, final long _yTimeStep)
+	{
+		parser = _pa; presenter = _pr;
+		yTimeStep = _yTimeStep;
+	}
 
 	///the parser used in this story
 	private final
@@ -35,6 +41,20 @@ class loggerBackend
 	///the presenter used in this story
 	private final
 	Presenter presenter;
+
+	/**
+	 * y-axis grouping interval, such that events from different
+	 * loggers/sources 'x' can be understood as happening "nearly
+	 * at the same time" if their time stamps are not more than this
+	 * value appart (the distance value takes, therefore, the same
+	 * units as are used for 'y' axis in the original log file);
+	 * the events that fall within this distance are ideally to be
+	 * displayed at the same position on the 'y' axis of the 2D/flattish
+	 * view
+	 *
+	 * this parameter is relevant to \e this.parser only
+	 */
+	final long yTimeStep;
 
 	///the number of characters at which line-breaks are introduced to the input messages
 	int msgWrap = 50;
