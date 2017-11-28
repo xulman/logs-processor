@@ -43,6 +43,11 @@ public class loggerFrontend implements Command
 		description = "The log file content should be understandable by the choosen log parser.")
 	public File inLogFile;
 
+	@Parameter(label = "Time resolution for grouping (-1 for default):",
+		columns = 10,
+		description = "How close in the time two logged events has to be, to be displayed at the same temporal level (y-axis) in the output.")
+	public long timeResolution = -1;
+
 	@Parameter(label = "Input log parser:",
 		choices = {"Testing parser",
 		           "DAIS parser",
@@ -71,6 +76,7 @@ public class loggerFrontend implements Command
 			System.out.println("parser       : "+inputParser);
 			System.out.println("presenter    : "+outputPresenter);
 			System.out.println("write to file: "+outputFile);
+			System.out.println("time res in  : "+timeResolution);
 
 			//initialize the appropriate parser and presenter
 			Parser pa = null;
@@ -101,8 +107,12 @@ public class loggerFrontend implements Command
 				 System.err.format("IOException: %s%n", e);
 			}
 
+			//if default time res is requested, determine it...
+			if (timeResolution == -1) timeResolution = pa.getTypicalTimeResolution();
+			System.out.println("time res used: "+timeResolution);
+
 			//create the loggerBackend, and use it
-			loggerBackend lb = new loggerBackend(pa,pr,pa.getTypicalTimeResolution());
+			loggerBackend lb = new loggerBackend(pa,pr,timeResolution);
 
 			//don't wrap lines for the HTML outputs
 			if (outputPresenter.startsWith("HTML")) lb.msgWrap = 200;
@@ -145,6 +155,7 @@ public class loggerFrontend implements Command
 		//parse and store the arguments, if necessary
 		miniMe.inLogFile = new File("/tmp/dais_log.txt");
 		miniMe.inputParser = "DAIS parser";
+		miniMe.timeResolution = -1;
 		miniMe.outputPresenter = "HTMLw presenter";
 		miniMe.outputFile = new File("/tmp/dais_log.html");
 
