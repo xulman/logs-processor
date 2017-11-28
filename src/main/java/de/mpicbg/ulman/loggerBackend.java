@@ -172,10 +172,33 @@ class loggerBackend
 		//iterate logged data in the correct order
 		for (String x : permutation.values())
 		{
+			int currentMarker = 0;
+			long orderWithinMarker = 0;
+
 			TreeMap<Long,Event> xLog = logs.get(x);
 			//NB: Tree guarantees the 'y' values are accessed in the correct order
 			for (Long y : xLog.keySet())
-				presenter.show(xLog.get(y));
+			{
+				//convert "time stamp" y to a marker index m
+				final int m = (int)((y-yMin) / yTimeStep);
+				if (m == currentMarker)
+				{
+					//still in the same marker as before
+					++orderWithinMarker;
+				}
+				else
+				{
+					//entered a new marker
+					currentMarker = m;
+					orderWithinMarker = 1;
+				}
+
+				final Event e = xLog.get(y);
+				//convert "time stamp" y to a "row coordinate"
+				e.y = yMarkers[currentMarker] + orderWithinMarker -1;
+
+				presenter.show(e);
+			}
 		}
 
 		presenter.close();
