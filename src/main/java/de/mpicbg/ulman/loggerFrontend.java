@@ -22,8 +22,7 @@ import java.io.IOException;
 import de.mpicbg.ulman.inputParsers.*;
 import de.mpicbg.ulman.outputPresenters.*;
 
-
-@Plugin(type = Command.class, menuPath = "Ulman>logger",
+@Plugin(type = Command.class, menuPath = "Window>2D Log Composer",
         name = "Ulman_logger", headless = true,
 		  description = "Processes multiple logs and displays them in a unified single view.")
 public class loggerFrontend implements Command
@@ -34,9 +33,9 @@ public class loggerFrontend implements Command
 	private LogService log = null;
 
 	//information....
-	@Parameter(visibility = ItemVisibility.MESSAGE, persist = false, required = false, label = ":")
+	@Parameter(visibility = ItemVisibility.MESSAGE, persist = false, required = false)
 	private final String infoMsg
-		= "some information?";
+		= "Processes log from multiple loggers and display it in a unified single flattish/2D view.";
 
 	@Parameter(label = "Path to input log file:",
 		columns = 40, style = FileWidget.OPEN_STYLE,
@@ -44,7 +43,7 @@ public class loggerFrontend implements Command
 	public File inLogFile;
 
 	@Parameter(label = "Time resolution for grouping (-1 for default):",
-		columns = 10,
+		columns = 10, min = "-1",
 		description = "How close in the time two logged events has to be, to be displayed at the same temporal level (y-axis) in the output.")
 	public long timeResolution = -1;
 
@@ -57,8 +56,7 @@ public class loggerFrontend implements Command
 	@Parameter(label = "Output log presenter:",
 		choices = {"Simple console writer",
 		           "HTML file",
-		           "HTMLwithHeaders file",
-		           "SVG image"})
+		           "HTMLwithHeaders file"})
 	public String outputPresenter;
 
 	@Parameter(label = "Path to output file:",
