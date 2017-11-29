@@ -65,7 +65,7 @@ public class MitoGen extends AbstractParser
 			{
 			case 0:
 				currentEvent.x = "Thread 1";
-				currentEvent.y = counter++; counter+=2; //for the title and for an empty separating line
+				currentEvent.y = 0;
 				currentEvent.msg.add("00:00, initialization"); //title of the msg
 
 				//reads until the intro part is over
@@ -104,12 +104,12 @@ public class MitoGen extends AbstractParser
 					//the message source -- thread ID
 					currentEvent.x = line.substring(0,atPos);
 
-					//could extract time here....
-
-					//line number as 'y'
-					currentEvent.y = counter;
-					counter += 2;
-					//NB: were utilizing Event.title here, hence consider 2 lines per event
+					//extract time here...
+					lastExtractedTime  = Long.parseLong(line.substring(atPos+4,atPos+6))*3600000;
+					lastExtractedTime += Long.parseLong(line.substring(atPos+7,atPos+9))*60000;
+					lastExtractedTime += Long.parseLong(line.substring(atPos+10,atPos+12))*1000;
+					lastExtractedTime += Long.parseLong(line.substring(atPos+13,atPos+16));
+					currentEvent.y = lastExtractedTime;
 
 					//the message title
 					currentEvent.msg.add(line.substring(atPos+4));
@@ -125,8 +125,8 @@ public class MitoGen extends AbstractParser
 				//if we got here, we likely have just reached first line of the last log section
 				readingPhase = 2;
 				currentEvent.x = "Thread 1";
-				currentEvent.y = counter+1; //for an empty separating line
-				currentEvent.msg.add("99:99, closing"); //title of the msg
+				currentEvent.y = lastExtractedTime + 2*getTypicalTimeResolution();
+				currentEvent.msg.add("99:99:99, closing"); //title of the msg
 				currentEvent.msg.add(line);             //first line of the body of the msg
 
 			case 2:
@@ -154,5 +154,13 @@ public class MitoGen extends AbstractParser
 		}
 	}
 
-	private long counter = 0;
+	///the last extracted time point value, required when readingPhase == 2
+	private
+	long lastExtractedTime = 0;
+
+	@Override
+	///use 100ms grouping by default
+	public
+	long getTypicalTimeResolution()
+	{ return 100; }
 }
