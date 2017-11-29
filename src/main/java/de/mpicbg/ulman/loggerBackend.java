@@ -10,9 +10,10 @@
 package de.mpicbg.ulman;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import de.mpicbg.ulman.inputParsers.Parser;
 import de.mpicbg.ulman.outputPresenters.Presenter;
@@ -126,10 +127,30 @@ class loggerBackend
 		//now, introduce a permutation that would prescribe the read out order
 		//of the logs items ('x') such that the items are accessed in the order of
 		//their smallest 'y' values
-		//TreeMap<Long,String> permutation = new TreeMap<>(); //OPRAVIT VLADO
-		//NB:    'y'  'x'
-		//for (String x : logs.keySet()) permutation.put(logs.get(x).firstKey(), x); //OPRAVIT VLADO
-		LinkedList<String> permutation = new LinkedList<>(logs.keySet());
+		//
+		//over all sources 'x', construct relevant pairs (x,y),
+		//and insert-sort them according to 'y' into this list
+		class MyPair {
+			public MyPair(final String _x, final long _y) { x = _x; y = _y; }
+			public final String x;
+			public final long y;
+		};
+		LinkedList<MyPair> permutation = new LinkedList<>();
+
+		for (String x : logs.keySet())
+		{
+			//the pair (x,y) to be inserted
+			final long y = logs.get(x).firstKey();
+
+			//search "one-behind" the proper list element
+			final ListIterator<MyPair> i = permutation.listIterator();
+			boolean keepGoing = true;
+			while (i.hasNext() && keepGoing) keepGoing = (i.next().y <= y);
+
+			//move one back at the proper "index"
+			if (!keepGoing) i.previous();
+			i.add(new MyPair(x,y));
+		}
 
 		//now, convert time stamps into (table) row numbers such that presenters can produce
 		//dense/compact views (if time-stamps were too apart from each other, this manifested
@@ -204,13 +225,12 @@ class loggerBackend
 		presenter.initialize(logs.size(), 0,yMarkers[yMarkers.length-1]+currentLength-1, msgWrap,msgMaxLines);
 
 		//iterate logged data in the correct order
-		//for (String x : permutation.values()) //OPRAVIT VLADO
-		for (String x : permutation)
+		for (MyPair mp : permutation)
 		{
 			int currentMarker = 0;
 			long orderWithinMarker = 0;
 
-			TreeMap<Long,Event> xLog = logs.get(x);
+			TreeMap<Long,Event> xLog = logs.get(mp.x);
 			//NB: Tree guarantees the 'y' values are accessed in the correct order
 			for (Long y : xLog.keySet())
 			{
