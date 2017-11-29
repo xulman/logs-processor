@@ -10,6 +10,7 @@
 package de.mpicbg.ulman;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -125,9 +126,10 @@ class loggerBackend
 		//now, introduce a permutation that would prescribe the read out order
 		//of the logs items ('x') such that the items are accessed in the order of
 		//their smallest 'y' values
-		TreeMap<Long,String> permutation = new TreeMap<>();
+		//TreeMap<Long,String> permutation = new TreeMap<>(); //OPRAVIT VLADO
 		//NB:    'y'  'x'
-		for (String x : logs.keySet()) permutation.put(logs.get(x).firstKey(), x);
+		//for (String x : logs.keySet()) permutation.put(logs.get(x).firstKey(), x); //OPRAVIT VLADO
+		LinkedList<String> permutation = new LinkedList<>(logs.keySet());
 
 		//now, convert time stamps into (table) row numbers such that presenters can produce
 		//dense/compact views (if time-stamps were too apart from each other, this manifested
@@ -202,7 +204,8 @@ class loggerBackend
 		presenter.initialize(logs.size(), 0,yMarkers[yMarkers.length-1]+currentLength-1, msgWrap,msgMaxLines);
 
 		//iterate logged data in the correct order
-		for (String x : permutation.values())
+		//for (String x : permutation.values()) //OPRAVIT VLADO
+		for (String x : permutation)
 		{
 			int currentMarker = 0;
 			long orderWithinMarker = 0;
