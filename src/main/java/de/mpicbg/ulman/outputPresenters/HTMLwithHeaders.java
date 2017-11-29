@@ -35,7 +35,7 @@ public class HTMLwithHeaders extends HTML
 	                final long _msgWidthChars,
 	                final long _msgMaxLines)
 	{
-		super.initialize(_xColumns, 2*_yMin, 2*_yMax, _msgWidthChars, _msgMaxLines);
+		super.initialize(_xColumns, 2*_yMin, 2*_yMax +1, _msgWidthChars, _msgMaxLines);
 	}
 
 	@Override

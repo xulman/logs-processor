@@ -97,7 +97,7 @@ public class HTML extends AbstractPresenter
 +"    position: absolute;\n"
 +"    top: 0px;\n"
 +"    width: "+(xCharStep*columnWidthChars)+"px;\n"
-+"    height: "+(yCharStep*(yMax-yMin+2))+"px;\n"
++"    height: "+(yCharStep*(yMax-yMin+1))+"px;\n"
 +"}\n"
 +"\n"
 +".tooltip:hover .tooltiptext {\n"
