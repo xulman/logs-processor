@@ -197,12 +197,9 @@ class loggerBackend
 			currentLength = bckp;
 		}
 
-		//adjust also the interval of 'y' (row) coordinates that will come
-		yMin = 0;
-		yMax = yMarkers[yMarkers.length-1]+currentLength -1;
-
 		//finally, start "presenting" the stored logs
-		presenter.initialize(logs.size(), yMin,yMax, msgWrap,msgMaxLines);
+		//on adjusted interval of 'y' (row) coordinates that will come
+		presenter.initialize(logs.size(), 0,yMarkers[yMarkers.length-1]+currentLength-1, msgWrap,msgMaxLines);
 
 		//iterate logged data in the correct order
 		for (String x : permutation.values())
