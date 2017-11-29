@@ -29,12 +29,23 @@ public class HTMLwithHeaders extends HTML
 
 	@Override
 	public
+	void initialize(final long _xColumns,
+	                final long _yMin,
+	                final long _yMax,
+	                final long _msgWidthChars,
+	                final long _msgMaxLines)
+	{
+		super.initialize(_xColumns, 2*_yMin, 2*_yMax, _msgWidthChars, _msgMaxLines);
+	}
+
+	@Override
+	public
 	void show(final Event e)
 	{
 		try {
 			//position
 			final long posX = padding+ (10 + xCharStep*columnWidthChars) * getColumnNo(e.x);
-			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
+			final long posY = padding+ (ySpan*(2*e.y - yMin))/(yMax-yMin);
 
 			final Iterator<String> i = e.msg.iterator();
 			writer.append("<div class=\"toolhead\" style=\"left:"+posX+"px; top:"+posY+"px;\">");
