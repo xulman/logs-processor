@@ -68,11 +68,7 @@ public class DAISwp13 extends AbstractParser
 			currentEvent.msg.add(String.format("%.3f secs",
 			                       Float.parseFloat(line.substring(0,delimIdx-1))/1000.));
 			//time stamps as 'y'
-			//currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
-			//line number as 'y'
-			currentEvent.y = counter;
-			counter += 2;
-			//NB: were utilizing Event.title here, hence consider 2 lines per event
+			currentEvent.y = Integer.parseInt(line.substring(0,delimIdx-1));
 
 			//the message body
 			final String restOfLine = line.substring(delimIdx+2);
@@ -85,5 +81,9 @@ public class DAISwp13 extends AbstractParser
 		}
 	}
 
-	private long counter = 1;
+	@Override
+	///use 100ms grouping by default
+	public
+	long getTypicalTimeResolution()
+	{ return 100; }
 }

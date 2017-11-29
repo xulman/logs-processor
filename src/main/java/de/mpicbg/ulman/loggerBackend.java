@@ -12,6 +12,8 @@ package de.mpicbg.ulman;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import de.mpicbg.ulman.inputParsers.Parser;
 import de.mpicbg.ulman.outputPresenters.Presenter;
@@ -22,11 +24,17 @@ class loggerBackend
 	///no default/easy construction allowed
 	@SuppressWarnings("unused")
 	private loggerBackend()
-	{ parser = null; presenter = null; }
+	{
+		parser = null; presenter = null;
+		yTimeStep = 1;
+	}
 
 	///this is the main constructor; cannot switch parser/presenter during operation
-	loggerBackend(final Parser _pa, final Presenter _pr)
-	{ parser = _pa; presenter = _pr; }
+	loggerBackend(final Parser _pa, final Presenter _pr, final long _yTimeStep)
+	{
+		parser = _pa; presenter = _pr;
+		yTimeStep = _yTimeStep;
+	}
 
 	///the parser used in this story
 	private final
@@ -35,6 +43,20 @@ class loggerBackend
 	///the presenter used in this story
 	private final
 	Presenter presenter;
+
+	/**
+	 * y-axis grouping interval, such that events from different
+	 * loggers/sources 'x' can be understood as happening "nearly
+	 * at the same time" if their time stamps are not more than this
+	 * value appart (the distance value takes, therefore, the same
+	 * units as are used for 'y' axis in the original log file);
+	 * the events that fall within this distance are ideally to be
+	 * displayed at the same position on the 'y' axis of the 2D/flattish
+	 * view
+	 *
+	 * this parameter is relevant to \e this.parser only
+	 */
+	final long yTimeStep;
 
 	///the number of characters at which line-breaks are introduced to the input messages
 	int msgWrap = 50;
@@ -105,21 +127,133 @@ class loggerBackend
 		//now, introduce a permutation that would prescribe the read out order
 		//of the logs items ('x') such that the items are accessed in the order of
 		//their smallest 'y' values
-		TreeMap<Long,String> permutation = new TreeMap<>();
-		//NB:    'y'  'x'
-		for (String x : logs.keySet()) permutation.put(logs.get(x).firstKey(), x);
+		//
+		//over all sources 'x', construct relevant pairs (x,y),
+		//and insert-sort them according to 'y' into this list
+		class MyPair {
+			public MyPair(final String _x, final long _y) { x = _x; y = _y; }
+			public final String x;
+			public final long y;
+		};
+		LinkedList<MyPair> permutation = new LinkedList<>();
 
+		for (String x : logs.keySet())
+		{
+			//the pair (x,y) to be inserted
+			final long y = logs.get(x).firstKey();
+
+			//search "one-behind" the proper list element
+			final ListIterator<MyPair> i = permutation.listIterator();
+			boolean keepGoing = true;
+			while (i.hasNext() && keepGoing) keepGoing = (i.next().y <= y);
+
+			//move one back at the proper "index"
+			if (!keepGoing) i.previous();
+			i.add(new MyPair(x,y));
+		}
+
+		//now, convert time stamps into (table) row numbers such that presenters can produce
+		//dense/compact views (if time-stamps were too apart from each other, this manifested
+		//itself as a long empty space between displays of the consecutive events) and allow
+		//multiple readers to occupy the same (table) row (of course, in their respective columns)
+		//
+		//we gonna introduce a set of row markers on the y-axis, every marker binds a particular
+		//row number with a time stamp; no event with earlier time stamp should be displayed
+		//above (with smaller row number) this marker; the spacing between consecutive markers
+		//is driven only by the amount of events that fall between the two markers -- so markers
+		//row-spacing is not regular/fixed, but spacing of markers on the time stamp axis is
+		//regular to ease the computation/programming
+		//
+		//a marker at index m gathers all events e for which it holds:
+		//  ceil((e.y-yMin) / yTimeStep) = m
+		//and these events must be displayed at y-coordinates between yMarkers[m] and yMarkers[m+1]
+		long yMarkers[] = new long[(int)((yMax-yMin) / yTimeStep) +1];
+
+		//plan:
+		//first pass: for every marker index m, count maximum, over all sources 'x',
+		//            number of events that fall into the index m
+		//second pass: adjust yMarkers[] values accordingly
+
+		//first pass: for every marker index m, count maximum, over all sources 'x',
+		//            number of events that fall into the index m
+		for (TreeMap<Long,Event> xLog : logs.values())
+		{
+			int currentMarker = 0;
+			long orderWithinMarker = 0;
+
+			for (Long y : xLog.keySet())
+			{
+				//convert "time stamp" y to a marker index m
+				final int m = (int)((y-yMin) / yTimeStep);
+				if (m == currentMarker)
+				{
+					//still in the same marker as before
+					++orderWithinMarker;
+				}
+				else
+				{
+					//entered a new marker:
+					//any further event shall not enter currentMarker anymore,
+					//nor any of the previous markers... adjust the stats then
+					if (orderWithinMarker > yMarkers[currentMarker])
+						yMarkers[currentMarker] = orderWithinMarker;
+
+					//and "enter" a new marker
+					currentMarker = m;
+					orderWithinMarker = 1;
+				}
+			}
+
+			//update stats of the last marker too
+			if (orderWithinMarker > yMarkers[currentMarker])
+				yMarkers[currentMarker] = orderWithinMarker;
+		}
+
+		//second pass: adjust yMarkers[] values accordingly,
+		//i.e. yMarkers[m] = sum_i=0..m-1 yMarkers[i] and yMarkers[0] = 0;
+		long currentLength = yMarkers[0]; //max number of events that fall into 0-th marker
+		yMarkers[0] = 0;                  //min y-row-coordinate of these events
+		for (int i=1; i < yMarkers.length; ++i)
+		{
+			final long bckp = yMarkers[i];
+			yMarkers[i] = yMarkers[i-1]+currentLength;
+			currentLength = bckp;
+		}
 
 		//finally, start "presenting" the stored logs
-		presenter.initialize(logs.size(), yMin,yMax, msgWrap,msgMaxLines);
+		//on adjusted interval of 'y' (row) coordinates that will come
+		presenter.initialize(logs.size(), 0,yMarkers[yMarkers.length-1]+currentLength-1, msgWrap,msgMaxLines);
 
 		//iterate logged data in the correct order
-		for (String x : permutation.values())
+		for (MyPair mp : permutation)
 		{
-			TreeMap<Long,Event> xLog = logs.get(x);
+			int currentMarker = 0;
+			long orderWithinMarker = 0;
+
+			TreeMap<Long,Event> xLog = logs.get(mp.x);
 			//NB: Tree guarantees the 'y' values are accessed in the correct order
 			for (Long y : xLog.keySet())
-				presenter.show(xLog.get(y));
+			{
+				//convert "time stamp" y to a marker index m
+				final int m = (int)((y-yMin) / yTimeStep);
+				if (m == currentMarker)
+				{
+					//still in the same marker as before
+					++orderWithinMarker;
+				}
+				else
+				{
+					//entered a new marker
+					currentMarker = m;
+					orderWithinMarker = 1;
+				}
+
+				final Event e = xLog.get(y);
+				//convert "time stamp" y to a "row coordinate"
+				e.y = yMarkers[currentMarker] + orderWithinMarker -1;
+
+				presenter.show(e);
+			}
 		}
 
 		presenter.close();
