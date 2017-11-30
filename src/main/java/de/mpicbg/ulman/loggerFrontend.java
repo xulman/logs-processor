@@ -15,6 +15,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.log.LogService;
 import org.scijava.widget.FileWidget;
 import org.scijava.ItemVisibility;
+import net.imagej.ImageJ;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class loggerFrontend implements Command
 
 	@Parameter(label = "Output log presenter:",
 		choices = {"Simple console writer",
+		           "Fiji table",
 		           "HTML file",
 		           "HTMLwithHeaders file"})
 	public String outputPresenter;
@@ -89,6 +91,9 @@ public class loggerFrontend implements Command
 					//default (debugging) parser
 					pa = new AbstractParser();
 
+				if (outputPresenter.startsWith("Fiji ta"))
+					pr = new FijiTable(log != null? new ImageJ(log.context()) : null);
+				else
 				if (outputPresenter.startsWith("HTML "))
 					pr = new HTML(outputFile,50);
 				else
