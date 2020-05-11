@@ -12,9 +12,9 @@ package de.mpicbg.ulman.outputPresenters;
 import de.mpicbg.ulman.Event;
 
 import net.imagej.ImageJ;
-import net.imagej.table.GenericTable;
-import net.imagej.table.DefaultGenericTable;
-import net.imagej.table.GenericColumn;
+import org.scijava.table.GenericTable;
+import org.scijava.table.DefaultGenericTable;
+import org.scijava.table.GenericColumn;
 
 /**
  * this class just prints coordinates and messages on the standard output
