@@ -86,7 +86,9 @@ public class AbstractPresenter implements Presenter
 			//move to the new/next column index and remember its label 'x'
 			++lastColumnIndex;
 			lastColumnLabel = x;
+			isNewColumnStarted = true;
 		}
+		else isNewColumnStarted = false;
 
 		return lastColumnIndex;
 	}
@@ -95,4 +97,9 @@ public class AbstractPresenter implements Presenter
 	private String lastColumnLabel = null;
 	///the index of the last seen column, works in conjunction with getColumnNo()
 	private long   lastColumnIndex = -1;
+
+	/** flags if this.getColumnNo() has just started a new column,
+	    this is useful to see if a column header should be drawn */
+	private boolean isNewColumnStarted = false;
+	protected boolean isNewColumnStarted() { return isNewColumnStarted; }
 }
