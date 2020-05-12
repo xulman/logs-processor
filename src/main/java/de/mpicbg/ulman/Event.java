@@ -43,4 +43,13 @@ public class Event
 		this.msg = new Vector<>(e.msg);
 		//NB: Vector's constructor creates a deep copy (in this case) -- good
 	}
+
+	@Override
+	public String toString()
+	{
+		String str = msg.firstElement();
+		if (str.length() > 50) str = str.substring(0,50);
+
+		return "Event of >" +x+ "< at " +y+ ": " + str;
+	}
 }
