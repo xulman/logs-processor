@@ -24,14 +24,23 @@ public class HTML extends AbstractPresenter
 	///the handle to the log file
 	final BufferedWriter writer;
 
-	///constructor
+	///constructor with no column headers
 	public
 	HTML(final File htmlFile, final int _columnWidthChars)
+	throws IOException
+	{
+		this(htmlFile,_columnWidthChars,0);
+	}
+
+	///constructor with column headers of the given height (as no. of rows)
+	public
+	HTML(final File htmlFile, final int _columnWidthChars, final int _headerRows)
 	throws IOException
 	{
 		//create the HTML file
 		writer = Files.newBufferedWriter(htmlFile.toPath());
 		columnWidthChars = _columnWidthChars;
+		headerRows = _headerRows;
 	}
 
 	protected void finalize()
@@ -45,7 +54,11 @@ public class HTML extends AbstractPresenter
 		{ } //just don't complain
 	}
 
+	///what is the width of every column
 	final int columnWidthChars;
+
+	///how many lines should be reserved for printing header on top of every column
+	final int headerRows;
 
 	@Override
 	public
@@ -97,7 +110,7 @@ public class HTML extends AbstractPresenter
 +"    position: absolute;\n"
 +"    top: 0px;\n"
 +"    width: "+(xCharStep*columnWidthChars)+"px;\n"
-+"    height: "+(yCharStep*(yMax-yMin+1))+"px;\n"
++"    height: "+(yCharStep*(yMax-yMin+1 +headerRows))+"px;\n"
 +"}\n"
 +"\n"
 +".tooltip:hover .tooltiptext {\n"
@@ -139,7 +152,20 @@ public class HTML extends AbstractPresenter
 		try {
 			//position
 			final long posX = padding+ (10 + xCharStep*columnWidthChars) * getColumnNo(e.x);
-			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin);
+			final long posY = padding+ (ySpan*(e.y - yMin))/(yMax-yMin) +yCharStep*headerRows;
+
+			if (isNewColumnStarted() && headerRows > 0)
+			{
+				//print header now, center-vertically
+				final long hPosY = yCharStep*(headerRows-1)/2 + padding;
+				writer.append("<div class=\"toolhead\" style=\"border-top: none; border-bottom: 1px dotted black; left:"+posX+"px; top:"+hPosY+"px;\">");
+				//
+				//make sure the header fits into the column
+				if (e.x.length() < columnWidthChars) writer.append(e.x);
+				else writer.append(e.x.substring(0,columnWidthChars-3)+"...");
+				writer.append("</div>");
+				writer.newLine();
+			}
 
 			writer.append("<div class=\"tooltip\" style=\"left:"+posX+"px; top:"+posY+"px;\">");
 			//always visible content
