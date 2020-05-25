@@ -69,6 +69,13 @@ public class HTML extends AbstractPresenter
 	                final long _msgMaxLines)
 	{
 		backUpHints(_xColumns, _yMin,_yMax, _msgWidthChars,_msgMaxLines);
+
+		if (yMax == yMin)
+		{
+			yMax = yMin+1;
+			System.out.println("INIT: auto-fixing not to have zero y-span");
+		}
+
 		ySpan = (yMax-yMin)*yCharStep; //*msgMaxLines;
 
 		try {
