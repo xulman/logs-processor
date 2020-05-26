@@ -19,18 +19,18 @@ import de.mpicbg.ulman.inputParsers.Parser;
 import de.mpicbg.ulman.outputPresenters.Presenter;
 
 
-public class loggerBackend
+public class ShowLogsCompacted
 {
 	/** no default/easy construction allowed */
 	@SuppressWarnings("unused")
-	private loggerBackend()
+	private ShowLogsCompacted()
 	{
 		parser = null; presenter = null;
 		yTimeStep = 1;
 	}
 
 	/** this is the main constructor; cannot switch parser/presenter during operation */
-	public loggerBackend(final Parser _pa, final Presenter _pr, final long _yTimeStep)
+	public ShowLogsCompacted(final Parser _pa, final Presenter _pr, final long _yTimeStep)
 	{
 		parser = _pa; presenter = _pr;
 		yTimeStep = _yTimeStep;

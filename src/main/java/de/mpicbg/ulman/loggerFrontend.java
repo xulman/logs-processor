@@ -115,7 +115,7 @@ public class loggerFrontend implements Command
 			System.out.println("time res used: "+timeResolution);
 
 			//create the loggerBackend, and use it
-			loggerBackend lb = new loggerBackend(pa,pr,timeResolution);
+			ShowLogsCompacted lb = new ShowLogsCompacted(pa,pr,timeResolution);
 
 			//don't wrap lines for the HTML outputs
 			if (outputPresenter.startsWith("HTML")) lb.msgWrap = 200;
