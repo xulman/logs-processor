@@ -19,9 +19,9 @@ import de.mpicbg.ulman.inputParsers.Parser;
 import de.mpicbg.ulman.outputPresenters.Presenter;
 
 
-class loggerBackend
+public class loggerBackend
 {
-	///no default/easy construction allowed
+	/** no default/easy construction allowed */
 	@SuppressWarnings("unused")
 	private loggerBackend()
 	{
@@ -29,26 +29,24 @@ class loggerBackend
 		yTimeStep = 1;
 	}
 
-	///this is the main constructor; cannot switch parser/presenter during operation
-	loggerBackend(final Parser _pa, final Presenter _pr, final long _yTimeStep)
+	/** this is the main constructor; cannot switch parser/presenter during operation */
+	public loggerBackend(final Parser _pa, final Presenter _pr, final long _yTimeStep)
 	{
 		parser = _pa; presenter = _pr;
 		yTimeStep = _yTimeStep;
 	}
 
-	///the parser used in this story
-	private final
-	Parser parser;
+	/** the parser used in this story */
+	final Parser parser;
 
-	///the presenter used in this story
-	private final
-	Presenter presenter;
+	/** the presenter used in this story */
+	final Presenter presenter;
 
 	/**
 	 * y-axis grouping interval, such that events from different
 	 * loggers/sources 'x' can be understood as happening "nearly
 	 * at the same time" if their time stamps are not more than this
-	 * value appart (the distance value takes, therefore, the same
+	 * value apart (the distance value takes, therefore, the same
 	 * units as are used for 'y' axis in the original log file);
 	 * the events that fall within this distance are ideally to be
 	 * displayed at the same position on the 'y' axis of the 2D/flattish
@@ -58,12 +56,12 @@ class loggerBackend
 	 */
 	final long yTimeStep;
 
-	///the number of characters at which line-breaks are introduced to the input messages
-	int msgWrap = 50;
+	/** wrap messages after this number of characters; note that the Event messages can be multi-line */
+	public int msgWrap = 50;
 
 
-	//the main worker: reads the whole input and feeds the presenter in the correct order (see Presenter)
-	void process()
+	/** the main worker: reads the whole input and feeds the presenter in the correct order (see Presenter) */
+	public void process()
 	{
 		//create a data structure to hold all the logs
 		HashMap<String, TreeMap<Long,Event> > logs = new HashMap<>(100);
