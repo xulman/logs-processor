@@ -100,9 +100,6 @@ public class loggerFrontend implements Command
 				if (outputPresenter.startsWith("HTMLw"))
 					pr = new HTMLwithHeaders(outputFile,50);
 				else
-				if (outputPresenter.startsWith("SVG"))
-					pr = null; //new SVG(outputFile);
-				else
 					//default (debugging) presenter
 					pr = new AbstractPresenter();
 			}

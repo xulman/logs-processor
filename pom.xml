@@ -27,8 +27,8 @@
   <packaging>jar</packaging>
 	<licenses>
 		<license>
-			<name>CC0 1.0 Universal License</name>
-			<url>http://creativecommons.org/publicdomain/zero/1.0/</url>
+			<name>Simplified BSD</name>
+			<url>https://choosealicense.com/licenses/bsd-2-clause/</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -57,7 +57,7 @@
 
 	<scm>
 		<connection>scm:git:git://github.com/xulman/logs-processor</connection>
-		<developerConnection>scm:git:localhost:9999</developerConnection>
+		<developerConnection>scm:git:git://github.com/xulman/logs-processor</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/xulman/logs-processor</url>
 	</scm>
@@ -70,8 +70,9 @@
 	</ciManagement>
 
 	<properties>
-		<license.licenseName>cc0</license.licenseName>
-		<license.copyrightOwners>N/A</license.copyrightOwners>
+		<package-name>de.mpicbg.ulman</package-name>
+		<license.licenseName>BSD 2-Clause</license.licenseName>
+		<license.copyrightOwners>xulman</license.copyrightOwners>
 		<license.projectName>logs-processor</license.projectName>
 	</properties>
 
