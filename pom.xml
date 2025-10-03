@@ -50,7 +50,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>ImageJ Forum</name>
-			<archive>http://forum.imagej.net/</archive>
+			<archive>https://forum.image.sc/</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -71,9 +71,9 @@
 
 	<properties>
 		<package-name>de.mpicbg.ulman</package-name>
-		<license.licenseName>BSD 2-Clause</license.licenseName>
-		<license.copyrightOwners>xulman</license.copyrightOwners>
-		<license.projectName>logs-processor</license.projectName>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>Vladimir Ulman</license.copyrightOwners>
+		<license.projectName>2D Logs Processor</license.projectName>
 	</properties>
 
 
