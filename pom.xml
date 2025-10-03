@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>42.0.0</version>
+		<version>43.0.0</version>
 		<relativePath />
 	</parent>
 
 
 	<groupId>de.mpicbg.ulman</groupId>
 	<artifactId>logs-processor</artifactId>
-	<version>1.1</version>
+	<version>1.1.1-SNAPSHOT</version>
 
 	<organization>
 		<name>MPI-CBG</name>
